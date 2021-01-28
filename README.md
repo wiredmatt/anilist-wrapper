@@ -21,7 +21,7 @@ yarn add anilist-wrapper
 # Usage
 
 ```js
-import { Client, queries, types } from "anilist-wrapper";
+import { Client } from "anilist-wrapper";
 
 //Public usage of the API
 const AniListClient = new Client();
@@ -30,28 +30,15 @@ const AniListClient = new Client();
 const AuthedAniListClient = new Client("your_access_token");
 
 ```
-
-###Fetching the animes that the user with the ID #831347 is currently watching.
+###Fetching the animes that the user is currently watching.
 
 ```js
 
-AniListClient.fetch<types.MediaListCollection>(
-  queries.UserMediaList.USER_ANIME_LIST({
-    userId: 831347,
-    status: types.MediaListStatus.Current
-  })
-)
-  .then((res) => console.log(JSON.stringify(res)))
-  .catch((err) => console.log(err));
 ```
 
 ###Getting the ID of the authorized user
 
 ```js
-
-AniListClient.fetch<types.User>(queries.User.FETCH_USER())
-  .then((res) => console.log(JSON.stringify(res)))
-  .catch((err) => console.log(err));
 
 ```
 
