@@ -37,13 +37,13 @@ export function FETCH_USER() {
     variables:{},
   };
 }
-export function USER_ANIME_LIST(variables: USER_MEDIA_LIST_ARGS) {
+export function USER_ANIME_LIST(userId: number) {
   return {
     query: `
-    query($userId: Int, $status: MediaListStatus){
-        MediaListCollection(userId: $userId, status: $status, type: ANIME) {
+    query($userId: Int){
+        MediaListCollection(userId: $userId, type: ANIME) {
           lists {
-            name
+            status
             entries {
               id
               mediaId
@@ -81,17 +81,19 @@ export function USER_ANIME_LIST(variables: USER_MEDIA_LIST_ARGS) {
         }
       }
     `,
-    variables,
+    variables:{
+      userId
+    },
   };
 }
 
-export function USER_MANGA_LIST(variables: USER_MEDIA_LIST_ARGS) {
+export function USER_MANGA_LIST(userId: number) {
   return {
     query: `
-    query($userId: Int, $status: MediaListStatus){
-        MediaListCollection(userId: $userId, status: $status, type: ANIME) {
+    query($userId: Int){
+        MediaListCollection(userId: $userId, type: MANGA) {
           lists {
-            name
+            status
             entries {
               id
               mediaId
@@ -130,6 +132,8 @@ export function USER_MANGA_LIST(variables: USER_MEDIA_LIST_ARGS) {
       }
       
     `,
-    variables,
+    variables:{
+      userId
+    },
   };
 }

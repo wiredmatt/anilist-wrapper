@@ -21,26 +21,119 @@ yarn add anilist-wrapper
 # Usage
 
 ```js
-import { Client } from "anilist-wrapper";
+import { Client, types } from "anilist-wrapper";
 
-//Public usage of the API
+//Public usage of the API (only queries)
 const AniListClient = new Client();
 
-//With a token:
+//Private usage of the API (mutations and queries regarding user's data)
 const AuthedAniListClient = new Client("your_access_token");
+```
+
+### Getting personal information and stats of the authenticated user
+
+```js
+AnilistClient.fetchUser()
+  .then((user) => console.log(JSON.stringify(user)))
+  .catch((err) => console.log(err));
+```
+
+### Fetching the anime and manga lists of the authenticated user
+
+```js
+let lists: types.MediaListGroup[] = [];
+let [animeWatching, animeCompleted, animeDropped, animePaused,
+    mangaReading, mangaCompleted, mangaDropped, mangaPaused] = lists;
+
+AnilistClient.fetchUserAnimeList()
+  .then((collection) => {
+    collection.lists!.map((l) => {
+      if (l.status === types.MediaListStatus.Current) {
+        animeWatching = l;
+      }
+      else if (l.status === types.MediaListStatus.Completed) {
+        animeCompleted = l;
+      }
+      else if (l.status === types.MediaListStatus.Dropped) {
+        animeDropped = l;
+      }
+      else if (l.status === types.MediaListStatus.Paused) {
+        animePaused = l;
+      }
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+  AnilistClient.fetchUserMangaList()
+  .then((collection) => {
+    collection.lists!.map((l) => {
+      if (l.status === types.MediaListStatus.Current) {
+        mangaReading = l;
+      }
+      else if (l.status === types.MediaListStatus.Completed) {
+        mangaCompleted = l;
+      }
+      else if (l.status === types.MediaListStatus.Dropped) {
+        mangaDropped = l;
+      }
+      else if (l.status === types.MediaListStatus.Paused) {
+        mangaPaused = l;
+      }
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 ```
-###Fetching the animes that the user is currently watching.
+### Searching anime and manga
+
+```js
+AnilistClient.searchAnime("Gintama", {
+  page: 1,
+  perPage: 10,
+})
+  .then((data) => console.log(JSON.stringify(data)))
+  .catch((err) => console.log(err));
+
+AnilistClient.searchManga("Gintama", {
+  page: 1,
+  perPage: 10,
+})
+  .then((data) => console.log(JSON.stringify(data)))
+  .catch((err) => console.log(err));
+
+```
+
+### Getting more details of anime and manga (excludes previously returned data from the previously documented .search<Media> function)
+
+```js
+AnilistClient.animeDetails(97940)
+  .then((details) => console.log(JSON.stringify(details)))
+  .catch((err) => console.log(err));
+
+AnilistClient.mangaDetails(53390)
+  .then((details) => console.log(JSON.stringify(details)))
+  .catch((err) => console.log(err));
+  
+```
+
+### Making your own custom function
 
 ```js
 
+AnilistClient.fetch<types.SomeType>({query: `your query`, variables: {
+  somevariable,
+  anothervariable
+}}).then(...).catch(...)
+  
 ```
 
-###Getting the ID of the authorized user
+# NOTE
 
-```js
-
-```
+This package only includes queries at the moment, next versions will include mutations also.
 
 # License
 

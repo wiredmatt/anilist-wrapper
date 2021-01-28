@@ -81,13 +81,6 @@ export type QueryObject = {
   variables: Object;
 };
 
-export type USER_MEDIA_LIST_ARGS = {
-  /** The id of the user*/
-  userId: Scalars["Int"];
-  /** Filter by status */
-  status: MediaListStatus;
-};
-
 export type MEDIA_SEARCH_ARGS = {
   /** What to search for */
   search: Scalars['String'];

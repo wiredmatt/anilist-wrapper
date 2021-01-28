@@ -30,7 +30,7 @@ class Client {
     }
   }
 
-  private async fetch<T>(queryObj: types.QueryObject): Promise<T> {
+  public async fetch<T>(queryObj: types.QueryObject): Promise<T> {
     const { query, variables } = queryObj;
     return await axios
       .post(
@@ -44,9 +44,10 @@ class Client {
         }
       )
       .then((response) => {
-        const r = response.data;
-        if (r.data.Page) return r.data.Page;
-        else if (r.data) return r.data;
+        const r = response.data.data;
+        if (r.Page) return r.Page;
+        else if (r.Viewer) return r.Viewer;
+        else if (r.MediaListCollection) return r.MediaListCollection;
         else return r;
       })
       .catch((err) => {
@@ -62,29 +63,19 @@ class Client {
     return await this.fetch<types.User>(queries.User.FETCH_USER());
   }
 
-  public async fetchUserAnimeList(
-    status: types.MediaListStatus
-  ): Promise<types.MediaListCollection> {
+  public async fetchUserAnimeList(): Promise<types.MediaListCollection> {
     if (!this.userId) throw { error: "User must be authenticated." };
 
     return await this.fetch<types.MediaListCollection>(
-      queries.User.USER_ANIME_LIST({
-        userId: this.userId,
-        status: status,
-      })
+      queries.User.USER_ANIME_LIST(this.userId)
     );
   }
 
-  public async fetchUserMangaList(
-    status: types.MediaListStatus
-  ): Promise<types.MediaListCollection> {
+  public async fetchUserMangaList(): Promise<types.MediaListCollection> {
     if (!this.userId) throw { error: "User must be authenticated." };
 
     return await this.fetch<types.MediaListCollection>(
-      queries.User.USER_MANGA_LIST({
-        userId: this.userId,
-        status: status,
-      })
+      queries.User.USER_MANGA_LIST(this.userId)
     );
   }
 
@@ -126,13 +117,13 @@ class Client {
 
   public async animeDetails(id: types.Scalars["Int"]): Promise<types.Media> {
     return await this.fetch<types.Media>(
-      queries.Media.SearchMedia.ANIME_DETAILS(id)
+      queries.Media.MediaDetails.ANIME_DETAILS(id)
     );
   }
 
   public async mangaDetails(id: types.Scalars["Int"]): Promise<types.Media> {
     return await this.fetch<types.Media>(
-      queries.Media.SearchMedia.MANGA_DETAILS(id)
+      queries.Media.MediaDetails.MANGA_DETAILS(id)
     );
   }
 }
