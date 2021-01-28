@@ -4,7 +4,7 @@ interface headers {
     "Content-Type": string;
     Authorization?: string;
 }
-declare class Client {
+export declare class Client {
     readonly accessToken?: string;
     readonly headers: headers;
     readonly userId?: types.Scalars["Int"];
@@ -18,5 +18,5 @@ declare class Client {
     animeDetails(id: types.Scalars["Int"]): Promise<types.Media>;
     mangaDetails(id: types.Scalars["Int"]): Promise<types.Media>;
 }
-export { Client, types };
+export {};
 //# sourceMappingURL=index.d.ts.map
