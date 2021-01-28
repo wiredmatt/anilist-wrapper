@@ -9,7 +9,7 @@ interface headers {
   Authorization?: string;
 }
 
-export class Client {
+class Client {
   readonly accessToken?: string;
 
   readonly headers: headers = {
@@ -127,3 +127,5 @@ export class Client {
     );
   }
 }
+
+export {Client,types}
