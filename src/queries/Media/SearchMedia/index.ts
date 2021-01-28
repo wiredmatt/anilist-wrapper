@@ -23,6 +23,7 @@ export function SEARCH_ANIME(variables: MEDIA_SEARCH_ARGS) {
             trailer {
               site
               id
+              thumbnail
             }
             season
             seasonYear
@@ -59,6 +60,7 @@ export function SEARCH_MANGA(variables: MEDIA_SEARCH_ARGS) {
             trailer {
               site
               id
+              thumbnail
             }
           }
         }
