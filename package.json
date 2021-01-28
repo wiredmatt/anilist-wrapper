@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/system32uwu/anilist-wraper#readme",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "jwt-decode": "^3.1.2"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",

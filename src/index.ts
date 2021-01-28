@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as types from "./types";
 import * as queries from "./queries";
+import jwtDecode from "jwt-decode";
 
 interface headers {
   Accept: string;
@@ -9,25 +10,27 @@ interface headers {
 }
 
 class Client {
-  accessToken?: string;
+  readonly accessToken?: string | null;
 
-  headers: headers = {
+  readonly headers: headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
   };
 
+  readonly userId: types.Scalars["Int"];
+
   constructor(accessToken?: string) {
     if (accessToken) {
       this.accessToken = accessToken;
-      this.headers = {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      };
+      this.headers.Authorization = `Bearer ${accessToken}`;
+      this.userId = jwtDecode(accessToken);
+    } else {
+      this.userId = -1;
+      this.accessToken = null;
     }
   }
 
-  public async fetch<T>(queryObj: types.QueryObject): Promise<T> {
+  private async fetch<T>(queryObj: types.QueryObject): Promise<T> {
     const { query, variables } = queryObj;
     return await axios
       .post(
@@ -51,6 +54,38 @@ class Client {
           error: err.message,
         };
       });
+  }
+
+  public async fetchUser(): Promise<types.User> {
+    if (!this.accessToken) throw { error: "User must be authenticated." };
+    
+    return await this.fetch<types.User>(queries.User.FETCH_USER());
+  }
+
+  public async fetchUserAnimeList(
+    status: types.MediaListStatus
+  ): Promise<types.MediaListCollection> {
+    if (this.userId === -1) throw { error: "User must be authenticated." };
+
+    return await this.fetch<types.MediaListCollection>(
+      queries.User.USER_ANIME_LIST({
+        userId: this.userId,
+        status: status,
+      })
+    );
+  }
+
+  public async fetchUserMangaList(
+    status: types.MediaListStatus
+  ): Promise<types.MediaListCollection> {
+    if (this.userId === -1) throw { error: "User must be authenticated." };
+
+    return await this.fetch<types.MediaListCollection>(
+      queries.User.USER_MANGA_LIST({
+        userId: this.userId,
+        status: status,
+      })
+    );
   }
 }
 
