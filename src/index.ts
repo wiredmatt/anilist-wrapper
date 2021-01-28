@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as types from "./types";
 import * as queries from "./queries";
-import jsonwebtoken, { decode } from "jsonwebtoken";
+import jsonwebtoken from "jsonwebtoken";
 
 interface headers {
   Accept: string;
@@ -9,7 +9,7 @@ interface headers {
   Authorization?: string;
 }
 
-class Client {
+export class Client {
   readonly accessToken?: string;
 
   readonly headers: headers = {
@@ -127,5 +127,3 @@ class Client {
     );
   }
 }
-
-export { Client, types };
