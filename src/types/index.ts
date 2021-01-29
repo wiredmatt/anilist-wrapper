@@ -1455,7 +1455,7 @@ export type Character = {
   /** A general description of the character */
   description?: Maybe<Scalars["String"]>;
   /** If the character is marked as favourite by the currently authenticated user */
-  isFavourite: Scalars["Boolean"];
+  isFavourite?: Scalars["Boolean"];
   /** The url for the character page on the AniList website */
   siteUrl?: Maybe<Scalars["String"]>;
   /** Media that includes the character */

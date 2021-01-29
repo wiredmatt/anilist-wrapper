@@ -1,4 +1,2 @@
-import * as Media from "./Media/"
-import * as User from "./User"
-
-export {Media,User};
+export * as Media from "./Media/";
+export * as User from "./User";
