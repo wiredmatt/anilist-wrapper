@@ -141,4 +141,4 @@ This package only includes queries at the moment, next versions will include mut
 
 # License
 
-[MIT](https://github.com/system32uwu/anilist-wraper/blob/main/LICENSE.md)
+[MIT](https://github.com/system32uwu/anilist-wrapper/blob/main/LICENSE.md)
