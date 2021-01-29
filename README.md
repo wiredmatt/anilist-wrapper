@@ -148,7 +148,7 @@ await AnilistClient.searchCharacter("Gintoki", {
 
 ```
 
-### Getting more details of anime and manga
+### Getting more details of a character
 Merges two Character objects, one without details (returned from .searchCharacter) and the other one with details.
 
 ```js
