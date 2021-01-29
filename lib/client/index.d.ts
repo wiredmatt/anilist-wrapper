@@ -1,4 +1,4 @@
-import { headers, Scalars, QueryObject, User as UserType, MediaListCollection, QueryPageArgs, MediaStatus, SeasonYear, Media as MediaType } from "../types";
+import { headers, Scalars, QueryObject, User as UserType, MediaListCollection, QueryPageArgs, MediaStatus, SeasonYear, Media as MediaType, Character as CharacterType } from "../types";
 export declare class Client {
     readonly accessToken?: string;
     readonly headers: headers;
@@ -8,9 +8,11 @@ export declare class Client {
     fetchUser(): Promise<UserType>;
     fetchUserAnimeList(): Promise<MediaListCollection>;
     fetchUserMangaList(): Promise<MediaListCollection>;
-    searchAnime(search: Scalars["String"], pagination: QueryPageArgs, status?: MediaStatus, seasonYear?: SeasonYear, genres?: Scalars["String"][]): Promise<MediaListCollection>;
-    searchManga(search: Scalars["String"], pagination: QueryPageArgs, status?: MediaStatus, seasonYear?: SeasonYear, genres?: Scalars["String"][]): Promise<MediaListCollection>;
-    animeDetails(id: Scalars["Int"]): Promise<MediaType>;
-    mangaDetails(id: Scalars["Int"]): Promise<MediaType>;
+    searchAnime(search: Scalars["String"], pagination: QueryPageArgs, status?: MediaStatus, seasonYear?: SeasonYear, genres?: Scalars["String"][]): Promise<MediaType[]>;
+    searchManga(search: Scalars["String"], pagination: QueryPageArgs, status?: MediaStatus, seasonYear?: SeasonYear, genres?: Scalars["String"][]): Promise<MediaType[]>;
+    animeDetails(anime: MediaType): Promise<MediaType>;
+    mangaDetails(manga: MediaType): Promise<MediaType>;
+    searchCharacter(search: Scalars["String"], pagination: QueryPageArgs): Promise<CharacterType[]>;
+    characterDetails(character: CharacterType): Promise<CharacterType>;
 }
 //# sourceMappingURL=index.d.ts.map

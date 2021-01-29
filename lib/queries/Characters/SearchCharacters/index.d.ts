@@ -1,9 +1,9 @@
-export declare function SEARCH_CHARACTERS(search: string, page: number, perPage: number): {
+import { QueryPageArgs } from "../../../types";
+export declare function SEARCH_CHARACTERS(search: string, pagination: QueryPageArgs): {
     query: string;
     variables: {
         search: string;
-        page: number;
-        perPage: number;
+        pagination: QueryPageArgs;
     };
 };
 //# sourceMappingURL=index.d.ts.map
