@@ -47,7 +47,7 @@ let lists: MediaListGroup[] = [];
 let [animeWatching, animeCompleted, animeDropped, animePaused,
     mangaReading, mangaCompleted, mangaDropped, mangaPaused] = lists;
 
-AnilistClient.fetchUserAnimeList()
+await AnilistClient.fetchUserAnimeList()
   .then((collection) => {
     collection.lists!.map((l) => {
       if (l.status === MediaListStatus.Current) {
@@ -68,7 +68,7 @@ AnilistClient.fetchUserAnimeList()
     console.log(err);
   });
 
-  AnilistClient.fetchUserMangaList()
+await AnilistClient.fetchUserMangaList()
   .then((collection) => {
     collection.lists!.map((l) => {
       if (l.status === MediaListStatus.Current) {
@@ -90,36 +90,39 @@ AnilistClient.fetchUserAnimeList()
   });
 
 ```
+
 ### Searching anime and manga
 
 ```js
-AnilistClient.searchAnime("Gintama", {
+let animes = [] as Media[];
+let mangas = [] as Media[];
+
+await AnilistClient.searchAnime("Gintama", {
   page: 1,
   perPage: 10,
 })
-  .then((data) => console.log(JSON.stringify(data)))
+  .then((data) => animes = data)
   .catch((err) => console.log(err));
 
-AnilistClient.searchManga("Gintama", {
+await AnilistClient.searchManga("Gintama", {
   page: 1,
   perPage: 10,
 })
-  .then((data) => console.log(JSON.stringify(data)))
+  .then((data) => mangas = data)
   .catch((err) => console.log(err));
 
 ```
 
-### Getting more details of anime and manga (excludes previously returned data from the previously documented .search<Media> function)
+### Getting more details of anime and manga (merges two Media objects, one without details (returned from .search<MediaType>) and the other one with details).
 
 ```js
-AnilistClient.animeDetails(97940)
+await AnilistClient.animeDetails(animes[0])
   .then((details) => console.log(JSON.stringify(details)))
   .catch((err) => console.log(err));
 
-AnilistClient.mangaDetails(53390)
+await AnilistClient.mangaDetails(mangas[0])
   .then((details) => console.log(JSON.stringify(details)))
   .catch((err) => console.log(err));
-  
 ```
 
 ### Making your own custom function
@@ -132,7 +135,7 @@ AnilistClient.fetch<SomeType>({query: `your query`, variables: {
   somevariable,
   anothervariable
 }}).then(...).catch(...)
-  
+
 ```
 
 # NOTE

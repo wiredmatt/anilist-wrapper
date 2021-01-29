@@ -3,3 +3,4 @@ src
 example.ts
 .git
 .gitignore
+test.ts

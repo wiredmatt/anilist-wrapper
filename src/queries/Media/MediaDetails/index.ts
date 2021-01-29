@@ -1,18 +1,23 @@
-
 export function ANIME_DETAILS(id: number) {
-    return {
-      query: `
+  return {
+    query: `
       query ($id: Int) {
         Media(id: $id) {
           description
           duration
           countryOfOrigin
           synonyms
+          mediaListEntry{
+            id
+            status
+            score
+            progress
+          }
           tags {
             id
             name
           }
-          nextAiringEpisode{
+          nextAiringEpisode {
             airingAt
             episode
           }
@@ -51,61 +56,73 @@ export function ANIME_DETAILS(id: number) {
           }
         }
       }
+      
           
       `,
-      variables:{
-        id
-      },
-    };
-  }
-  
-  
-  export function MANGA_DETAILS(id: number) {
-    return {
-      query: `
-      query ($id: Int) {
-        Media(id: $id) {
-          description
-          countryOfOrigin
-          synonyms
-          tags {
+    variables: {
+      id,
+    },
+  };
+}
+
+export function MANGA_DETAILS(id: number) {
+  return {
+    query: `
+    query ($id: Int) {
+      Media(id: $id) {
+        description
+        duration
+        countryOfOrigin
+        synonyms
+        mediaListEntry {
+          id
+          status
+          score
+          progress
+          progressVolumes
+        }
+        tags {
+          id
+          name
+        }
+        nextAiringEpisode {
+          airingAt
+          episode
+        }
+        characters {
+          nodes {
             id
-            name
-          }
-          characters {
-            nodes {
-              id
-              name {
-                full
-              }
-              image {
-                large
-              }
+            name {
+              full
+            }
+            image {
+              large
             }
           }
-          relations {
-            edges {
-              relationType
-              id
-              node {
-                title {
-                  userPreferred
-                }
-                type
-                format
-                status
-                season
-                seasonYear
+        }
+        relations {
+          edges {
+            relationType
+            id
+            node {
+              title {
+                userPreferred
               }
+              type
+              format
+              status
+              season
+              seasonYear
             }
           }
         }
       }
+    }
+    
       
       `,
-      variables:{
-        id
-      },
-    };
-  }
-  
+    variables: {
+      id,
+    },
+  };
+}

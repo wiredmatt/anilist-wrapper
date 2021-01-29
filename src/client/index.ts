@@ -15,6 +15,9 @@ import {
   Character as CharacterType,
 } from "../types";
 
+import { extend } from "../utils";
+
+
 export class Client {
   readonly accessToken?: string;
 
@@ -51,11 +54,13 @@ export class Client {
       )
       .then((response) => {
         const r = response.data.data;
-        if (r.Page.characters) return r.Page.characters;
-        else if (r.Page.media) return r.Page.media;
-        else if (r.Page) return r.Page;
+        if (r.Media) return r.Media;
         else if (r.Viewer) return r.Viewer;
         else if (r.MediaListCollection) return r.MediaListCollection;
+        else if (r.Page) {
+          if (r.Page.characters) return r.Page.characters;
+          else if (r.Page.media) return r.Page.media;
+        } 
         else return r;
       })
       .catch((err) => {
@@ -93,8 +98,8 @@ export class Client {
     status?: MediaStatus,
     seasonYear?: SeasonYear,
     genres?: Scalars["String"][]
-  ): Promise<MediaListCollection> {
-    return await this.fetch<MediaListCollection>(
+  ): Promise<MediaType[]> {
+    return await this.fetch<MediaType[]>(
       Media.SearchMedia.SEARCH_ANIME({
         search,
         pagination,
@@ -111,8 +116,8 @@ export class Client {
     status?: MediaStatus,
     seasonYear?: SeasonYear,
     genres?: Scalars["String"][]
-  ): Promise<MediaListCollection> {
-    return await this.fetch<MediaListCollection>(
+  ): Promise<MediaType[]> {
+    return await this.fetch<MediaType[]>(
       Media.SearchMedia.SEARCH_MANGA({
         search,
         pagination,
@@ -123,12 +128,14 @@ export class Client {
     );
   }
 
-  async animeDetails(id: Scalars["Int"]): Promise<MediaType> {
-    return await this.fetch<MediaType>(Media.MediaDetails.ANIME_DETAILS(id));
+  async animeDetails(anime: MediaType): Promise<MediaType> {
+    const details = await this.fetch<MediaType>(Media.MediaDetails.ANIME_DETAILS(anime.id));
+    return extend(details,anime);
   }
 
-  async mangaDetails(id: Scalars["Int"]): Promise<MediaType> {
-    return await this.fetch<MediaType>(Media.MediaDetails.MANGA_DETAILS(id));
+  async mangaDetails(manga: MediaType): Promise<MediaType> {
+    const details = await this.fetch<MediaType>(Media.MediaDetails.MANGA_DETAILS(manga.id));
+    return extend(details,manga)
   }
 
   async searchCharacter(
