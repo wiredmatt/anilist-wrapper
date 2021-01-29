@@ -1,23 +1,23 @@
 import { Client } from "./src";
 
-import { Media } from "./src/types";
+import { Character, Media } from "./src/types";
 
 const AnilistClient = new Client(process.env.TOKEN);
 
 async function fn() {
-  let mediaResult = {} as Media;
-  let detailedMedia = {} as Media;
+  let characterResult = {} as Character;
+  let detailedCharacter = {} as Character;
 
-  await AnilistClient.searchAnime("Gintama", {
+  await AnilistClient.searchCharacter("Gintoki", {
     page: 1,
     perPage: 10,
   })
-    .then(async (animes) => {
-      mediaResult = animes[0];
-      await AnilistClient.animeDetails(mediaResult)
+    .then(async (characters) => {
+      characterResult = characters[0];
+      await AnilistClient.characterDetails(characterResult)
         .then(async (data) => {
-          detailedMedia = data;
-          console.log(detailedMedia.id);
+          detailedCharacter = data;
+          console.log(JSON.stringify(detailedCharacter));
         })
         .catch((err) => console.log(err));
     })

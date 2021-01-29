@@ -113,7 +113,8 @@ await AnilistClient.searchManga("Gintama", {
 
 ```
 
-### Getting more details of anime and manga (merges two Media objects, one without details (returned from .search<MediaType>) and the other one with details).
+### Getting more details of anime and manga
+Merges two Media objects, one without details (returned from .search<MediaType>) and the other one with details.
 
 ```js
 await AnilistClient.animeDetails(animes[0])
@@ -123,6 +124,40 @@ await AnilistClient.animeDetails(animes[0])
 await AnilistClient.mangaDetails(mangas[0])
   .then((details) => console.log(JSON.stringify(details)))
   .catch((err) => console.log(err));
+```
+
+
+### Searching characters
+
+```js
+let characters = [] as Character[];
+
+let nonDetailedCharacter = {} as Character;
+
+let detailedCharacter = {} as Character;
+
+await AnilistClient.searchCharacter("Gintoki", {
+  page: 1,
+  perPage: 10,
+})
+  .then((charactersResponse) => {
+    characters = charactersResponse;
+    nonDetailedCharacter = characters[0];
+    })
+  .catch((err) => console.log(err));
+
+```
+
+### Getting more details of anime and manga
+Merges two Character objects, one without details (returned from .searchCharacter) and the other one with details.
+
+```js
+await AnilistClient.characterDetails(nonDetailedCharacter)
+        .then(async (detailedCharacterResponse) => {
+          detailedCharacter = detailedCharacterResponse;
+          console.log(JSON.stringify(detailedCharacter));
+        })
+        .catch((err) => console.log(err));
 ```
 
 ### Making your own custom function

@@ -56,6 +56,7 @@ export class Client {
         const r = response.data.data;
         if (r.Media) return r.Media;
         else if (r.Viewer) return r.Viewer;
+        else if (r.Character) return r.Character;
         else if (r.MediaListCollection) return r.MediaListCollection;
         else if (r.Page) {
           if (r.Page.characters) return r.Page.characters;
@@ -147,7 +148,8 @@ export class Client {
     );
   }
 
-  async characterDetails(id: number): Promise<CharacterType> {
-    return await this.fetch<CharacterType>(Character.CHARACTER_DETAILS(id));
+  async characterDetails(character: CharacterType): Promise<CharacterType> {
+    const details = await this.fetch<CharacterType>(Character.CHARACTER_DETAILS(character.id));
+    return extend(details,character); 
   }
 }
