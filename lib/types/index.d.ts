@@ -23,6 +23,11 @@ export declare type Scalars = {
     /** 8 digit long date integer (YYYYMMDD). Unknown dates represented by 0. E.g. 2016: 20160000, May 1976: 19760500 */
     FuzzyDateInt: any;
 };
+export interface headers {
+    Accept: Scalars['String'];
+    "Content-Type": Scalars['String'];
+    Authorization?: Scalars['String'];
+}
 export declare type Query = {
     __typename?: "Query";
     Page?: Maybe<Page>;

@@ -20,6 +20,12 @@ export type Scalars = {
   FuzzyDateInt: any;
 };
 
+export interface headers {
+  Accept: Scalars['String'];
+  "Content-Type": Scalars['String'];
+  Authorization?: Scalars['String'];
+}
+
 export type Query = {
   __typename?: "Query";
   Page?: Maybe<Page>;

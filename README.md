@@ -21,7 +21,7 @@ yarn add anilist-wrapper
 # Usage
 
 ```js
-import { Client, types } from "anilist-wrapper";
+import { Client } from "anilist-wrapper";
 
 //Public usage of the API (only queries)
 const AniListClient = new Client();
@@ -41,23 +41,25 @@ AnilistClient.fetchUser()
 ### Fetching the anime and manga lists of the authenticated user
 
 ```js
-let lists: types.MediaListGroup[] = [];
+import { MediaListGroup, MediaListStatus } from "anilist-wrapper";
+
+let lists: MediaListGroup[] = [];
 let [animeWatching, animeCompleted, animeDropped, animePaused,
     mangaReading, mangaCompleted, mangaDropped, mangaPaused] = lists;
 
 AnilistClient.fetchUserAnimeList()
   .then((collection) => {
     collection.lists!.map((l) => {
-      if (l.status === types.MediaListStatus.Current) {
+      if (l.status === MediaListStatus.Current) {
         animeWatching = l;
       }
-      else if (l.status === types.MediaListStatus.Completed) {
+      else if (l.status === MediaListStatus.Completed) {
         animeCompleted = l;
       }
-      else if (l.status === types.MediaListStatus.Dropped) {
+      else if (l.status === MediaListStatus.Dropped) {
         animeDropped = l;
       }
-      else if (l.status === types.MediaListStatus.Paused) {
+      else if (l.status === MediaListStatus.Paused) {
         animePaused = l;
       }
     });
@@ -69,16 +71,16 @@ AnilistClient.fetchUserAnimeList()
   AnilistClient.fetchUserMangaList()
   .then((collection) => {
     collection.lists!.map((l) => {
-      if (l.status === types.MediaListStatus.Current) {
+      if (l.status === MediaListStatus.Current) {
         mangaReading = l;
       }
-      else if (l.status === types.MediaListStatus.Completed) {
+      else if (l.status === MediaListStatus.Completed) {
         mangaCompleted = l;
       }
-      else if (l.status === types.MediaListStatus.Dropped) {
+      else if (l.status === MediaListStatus.Dropped) {
         mangaDropped = l;
       }
-      else if (l.status === types.MediaListStatus.Paused) {
+      else if (l.status === MediaListStatus.Paused) {
         mangaPaused = l;
       }
     });
@@ -124,7 +126,9 @@ AnilistClient.mangaDetails(53390)
 
 ```js
 
-AnilistClient.fetch<types.SomeType>({query: `your query`, variables: {
+import { SomeType } from "anilist-wrapper";
+
+AnilistClient.fetch<SomeType>({query: `your query`, variables: {
   somevariable,
   anothervariable
 }}).then(...).catch(...)
