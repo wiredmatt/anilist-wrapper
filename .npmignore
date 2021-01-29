@@ -1,3 +1,5 @@
 src
 .env
 example.ts
+.git
+.gitignore
