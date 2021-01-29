@@ -1,8 +1,6 @@
-export function SEARCH_CHARACTERS(
-  search: string,
-  page: number,
-  perPage: number
-) {
+import { QueryPageArgs } from "../../../types";
+
+export function SEARCH_CHARACTERS(search: string, pagination: QueryPageArgs) {
   return {
     query: `
         query ($search: String, $page: Int, $perPage: Int) {
@@ -35,8 +33,7 @@ export function SEARCH_CHARACTERS(
         `,
     variables: {
       search,
-      page,
-      perPage,
+      pagination,
     },
   };
 }

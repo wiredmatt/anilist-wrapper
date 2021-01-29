@@ -1,7 +1,7 @@
-"use strict"; 
+"use strict";
 import axios from "axios";
 import jsonwebtoken from "jsonwebtoken";
-import { User, Media } from "../queries";
+import { User, Media, Character } from "../queries";
 import {
   headers,
   Scalars,
@@ -12,6 +12,7 @@ import {
   MediaStatus,
   SeasonYear,
   Media as MediaType,
+  Character as CharacterType,
 } from "../types";
 
 export class Client {
@@ -50,7 +51,9 @@ export class Client {
       )
       .then((response) => {
         const r = response.data.data;
-        if (r.Page) return r.Page;
+        if (r.Page.characters) return r.Page.characters;
+        else if (r.Page.media) return r.Page.media;
+        else if (r.Page) return r.Page;
         else if (r.Viewer) return r.Viewer;
         else if (r.MediaListCollection) return r.MediaListCollection;
         else return r;
@@ -126,5 +129,18 @@ export class Client {
 
   async mangaDetails(id: Scalars["Int"]): Promise<MediaType> {
     return await this.fetch<MediaType>(Media.MediaDetails.MANGA_DETAILS(id));
+  }
+
+  async searchCharacter(
+    search: Scalars["String"],
+    pagination: QueryPageArgs
+  ): Promise<CharacterType[]> {
+    return await this.fetch<CharacterType[]>(
+      Character.SEARCH_CHARACTERS(search, pagination)
+    );
+  }
+
+  async characterDetails(id: number): Promise<CharacterType> {
+    return await this.fetch<CharacterType>(Character.CHARACTER_DETAILS(id));
   }
 }
