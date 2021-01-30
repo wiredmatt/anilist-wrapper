@@ -17,7 +17,6 @@ import {
 
 import { extend } from "../utils";
 
-
 export class Client {
   readonly accessToken?: string;
 
@@ -28,7 +27,14 @@ export class Client {
 
   readonly userId?: Scalars["Int"];
 
+  animeLists?: MediaListCollection;
+  
+  mangaLists?: MediaListCollection;
+
+  userData?: UserType;
+
   constructor(accessToken?: string) {
+    this.userData = {} as UserType;
     if (accessToken) {
       const decoded = jsonwebtoken.decode(accessToken);
       if (decoded) {
@@ -61,8 +67,7 @@ export class Client {
         else if (r.Page) {
           if (r.Page.characters) return r.Page.characters;
           else if (r.Page.media) return r.Page.media;
-        } 
-        else return r;
+        } else return r;
       })
       .catch((err) => {
         throw {
@@ -74,23 +79,39 @@ export class Client {
   async fetchUser(): Promise<UserType> {
     if (!this.userId) throw { error: "User must be authenticated." };
 
-    return await this.fetch<UserType>(User.FETCH_USER());
+    await this.fetch<UserType>(User.FETCH_USER())
+      .then((user) => {
+        this.userData = user;
+      })
+      .catch((err) => {
+        throw err;
+      });
+
+    return this.userData!;
   }
 
   async fetchUserAnimeList(): Promise<MediaListCollection> {
     if (!this.userId) throw { error: "User must be authenticated." };
 
-    return await this.fetch<MediaListCollection>(
+    await this.fetch<MediaListCollection>(
       User.USER_ANIME_LIST(this.userId)
-    );
+    ).then(lists => {
+      this.animeLists = lists;
+    })
+
+    return this.animeLists!;
   }
 
   async fetchUserMangaList(): Promise<MediaListCollection> {
     if (!this.userId) throw { error: "User must be authenticated." };
 
-    return await this.fetch<MediaListCollection>(
+    await this.fetch<MediaListCollection>(
       User.USER_MANGA_LIST(this.userId)
-    );
+    ).then(lists => {
+      this.mangaLists = lists;
+    })
+
+    return this.mangaLists!;
   }
 
   async searchAnime(
@@ -130,13 +151,17 @@ export class Client {
   }
 
   async animeDetails(anime: MediaType): Promise<MediaType> {
-    const details = await this.fetch<MediaType>(Media.MediaDetails.ANIME_DETAILS(anime.id));
-    return extend(details,anime);
+    const details = await this.fetch<MediaType>(
+      Media.MediaDetails.ANIME_DETAILS(anime.id)
+    );
+    return extend(details, anime);
   }
 
   async mangaDetails(manga: MediaType): Promise<MediaType> {
-    const details = await this.fetch<MediaType>(Media.MediaDetails.MANGA_DETAILS(manga.id));
-    return extend(details,manga)
+    const details = await this.fetch<MediaType>(
+      Media.MediaDetails.MANGA_DETAILS(manga.id)
+    );
+    return extend(details, manga);
   }
 
   async searchCharacter(
@@ -149,7 +174,9 @@ export class Client {
   }
 
   async characterDetails(character: CharacterType): Promise<CharacterType> {
-    const details = await this.fetch<CharacterType>(Character.CHARACTER_DETAILS(character.id));
-    return extend(details,character); 
+    const details = await this.fetch<CharacterType>(
+      Character.CHARACTER_DETAILS(character.id)
+    );
+    return extend(details, character);
   }
 }

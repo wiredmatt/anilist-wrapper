@@ -1,27 +1,22 @@
+require("dotenv").config();
 import { Client } from "./src";
 
-import { Character, Media } from "./src/types";
-
-const AnilistClient = new Client(process.env.TOKEN);
-
 async function fn() {
-  let characterResult = {} as Character;
-  let detailedCharacter = {} as Character;
+  console.log("function ejecutada");
 
-  await AnilistClient.searchCharacter("Gintoki", {
-    page: 1,
-    perPage: 10,
-  })
-    .then(async (characters) => {
-      characterResult = characters[0];
-      await AnilistClient.characterDetails(characterResult)
-        .then(async (data) => {
-          detailedCharacter = data;
-          console.log(JSON.stringify(detailedCharacter));
-        })
-        .catch((err) => console.log(err));
-    })
+  const AnilistClient = new Client(process.env.TOKEN);
+
+  await AnilistClient.fetchUser()
+    .then((x) => x)
     .catch((err) => console.log(err));
+
+  console.log(JSON.stringify(AnilistClient.userData));
+
+  await AnilistClient.fetchUserAnimeList()
+    .then((x) => x)
+    .catch((err) => console.log(err));
+
+  console.log(JSON.stringify(AnilistClient.animeLists!.lists![0]));
 }
 
 fn();
