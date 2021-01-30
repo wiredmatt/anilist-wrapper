@@ -3,6 +3,9 @@ export declare class Client {
     readonly accessToken?: string;
     readonly headers: headers;
     readonly userId?: Scalars["Int"];
+    animeLists?: MediaListCollection;
+    mangaLists?: MediaListCollection;
+    userData?: UserType;
     constructor(accessToken?: string);
     fetch<T>(queryObj: QueryObject): Promise<T>;
     fetchUser(): Promise<UserType>;
