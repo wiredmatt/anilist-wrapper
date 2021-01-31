@@ -1,22 +1,39 @@
 require("dotenv").config();
 import { Client } from "./src";
+import { MediaListGroup, MediaListStatus } from "./src/types";
 
 async function fn() {
-  console.log("function ejecutada");
+  const AniListClient = new Client(process.env.TOKEN);
 
-  const AnilistClient = new Client(process.env.TOKEN);
+  let lists: MediaListGroup[] = [];
+  let [
+    animeWatching,
+    animeCompleted,
+    animeDropped,
+    animePaused,
+    mangaReading,
+    mangaCompleted,
+    mangaDropped,
+    mangaPaused,
+  ] = lists;
 
-  await AnilistClient.fetchUser()
-    .then((x) => x)
-    .catch((err) => console.log(err));
-
-  console.log(JSON.stringify(AnilistClient.userData));
-
-  await AnilistClient.fetchUserAnimeList()
-    .then((x) => x)
-    .catch((err) => console.log(err));
-
-  console.log(JSON.stringify(AnilistClient.animeLists!.lists![0]));
+  await AniListClient.fetchUserAnimeList()
+    .then((collection) => {
+      collection.lists!.map((l) => {
+        if (l.status === MediaListStatus.Current) {
+          animeWatching = l;
+        } else if (l.status === MediaListStatus.Completed) {
+          animeCompleted = l;
+        } else if (l.status === MediaListStatus.Dropped) {
+          animeDropped = l;
+        } else if (l.status === MediaListStatus.Paused) {
+          animePaused = l;
+        }
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 fn();

@@ -97,7 +97,7 @@ export class Client {
       User.USER_ANIME_LIST(this.userId)
     ).then(lists => {
       this.animeLists = lists;
-    })
+    }).catch(err => {throw err})
 
     return this.animeLists!;
   }
@@ -109,7 +109,7 @@ export class Client {
       User.USER_MANGA_LIST(this.userId)
     ).then(lists => {
       this.mangaLists = lists;
-    })
+    }).catch(err => {throw err})
 
     return this.mangaLists!;
   }
@@ -153,14 +153,15 @@ export class Client {
   async animeDetails(anime: MediaType): Promise<MediaType> {
     const details = await this.fetch<MediaType>(
       Media.MediaDetails.ANIME_DETAILS(anime.id)
-    );
+    ).catch(err => {throw err});
+
     return extend(details, anime);
   }
 
   async mangaDetails(manga: MediaType): Promise<MediaType> {
     const details = await this.fetch<MediaType>(
       Media.MediaDetails.MANGA_DETAILS(manga.id)
-    );
+    ).catch(err => {throw err});
     return extend(details, manga);
   }
 
@@ -176,7 +177,7 @@ export class Client {
   async characterDetails(character: CharacterType): Promise<CharacterType> {
     const details = await this.fetch<CharacterType>(
       Character.CHARACTER_DETAILS(character.id)
-    );
+    ).catch(err => {throw err})
     return extend(details, character);
   }
 }
