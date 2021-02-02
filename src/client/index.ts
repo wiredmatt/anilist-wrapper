@@ -1,6 +1,6 @@
 "use strict";
 import axios from "axios";
-import jsonwebtoken from "jsonwebtoken";
+import jwtDecode from "jwt-decode";
 import { User, Media, Character } from "../queries";
 import {
   headers,
@@ -36,7 +36,7 @@ export class Client {
   constructor(accessToken?: string) {
     this.userData = {} as UserType;
     if (accessToken) {
-      const decoded = jsonwebtoken.decode(accessToken);
+      const decoded = jwtDecode(accessToken);
       if (decoded) {
         this.accessToken = accessToken;
         this.headers.Authorization = `Bearer ${accessToken}`;
