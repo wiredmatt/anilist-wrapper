@@ -15,6 +15,9 @@ export function USER_ANIME_LIST(userId: number) {
               media {
                 title {
                   userPreferred
+                  english
+                  native
+                  romaji
                 }
                 coverImage {
                   extraLarge

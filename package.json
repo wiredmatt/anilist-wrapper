@@ -1,6 +1,6 @@
 {
   "name": "anilist-wrapper",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "A wrapper for the AniList API",
   "main": "lib/index.js",
   "types": "lib",
