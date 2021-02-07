@@ -92,8 +92,8 @@ export declare type MEDIA_SEARCH_ARGS = {
     search: Scalars['String'];
     /** Filter by the media status*/
     status?: MediaStatus;
-    /** Filter by the media type */
-    pagination?: QueryPageArgs;
+    page?: Scalars['Int'];
+    perPage?: Scalars['Int'];
     /** Filter by season and year */
     seasonYear?: SeasonYear;
     /** With genres */
@@ -105,9 +105,9 @@ export declare type SeasonYear = {
 };
 export declare type QueryPageArgs = {
     /** Search in Page number n */
-    page?: Maybe<Scalars["Int"]>;
+    page: Scalars["Int"];
     /** How many results to show per page (max: 50, default 1) */
-    perPage?: Maybe<Scalars["Int"]>;
+    perPage: Scalars["Int"];
 };
 export declare type QueryMediaArgs = {
     id?: Maybe<Scalars["Int"]>;
