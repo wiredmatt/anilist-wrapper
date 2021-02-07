@@ -32,11 +32,6 @@ export function SEARCH_ANIME(variables: MEDIA_SEARCH_ARGS) {
             seasonYear
             mediaListEntry{
               id
-              mediaId
-              status
-              score
-              progress
-              repeat 
             }
           }
         }
