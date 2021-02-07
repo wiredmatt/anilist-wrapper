@@ -10,6 +10,9 @@ export function SEARCH_ANIME(variables: MEDIA_SEARCH_ARGS) {
             genres
             title {
               userPreferred
+              english
+              native
+              romaji
             }
             coverImage {
               extraLarge
@@ -27,6 +30,14 @@ export function SEARCH_ANIME(variables: MEDIA_SEARCH_ARGS) {
             }
             season
             seasonYear
+            mediaListEntry{
+              id
+              mediaId
+              status
+              score
+              progress
+              repeat 
+            }
           }
         }
       }
