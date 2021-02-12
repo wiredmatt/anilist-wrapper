@@ -3099,8 +3099,8 @@ export declare type MutationUpdateUserArgs = {
 };
 export declare type MutationSaveMediaListEntryArgs = {
     id?: Maybe<Scalars["Int"]>;
-    mediaId?: Maybe<Scalars["Int"]>;
-    status?: Maybe<MediaListStatus>;
+    mediaId: Maybe<Scalars["Int"]>;
+    status: Maybe<MediaListStatus>;
     score?: Maybe<Scalars["Float"]>;
     scoreRaw?: Maybe<Scalars["Int"]>;
     progress?: Maybe<Scalars["Int"]>;

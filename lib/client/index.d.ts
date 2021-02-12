@@ -1,4 +1,4 @@
-import { headers, Scalars, QueryObject, User as UserType, MediaListCollection, QueryPageArgs, MediaStatus, SeasonYear, Media as MediaType, Character as CharacterType } from "../types";
+import { headers, Scalars, QueryObject, User as UserType, MediaListCollection, QueryPageArgs, MediaStatus, SeasonYear, Media as MediaType, Character as CharacterType, MutationSaveMediaListEntryArgs, MediaList } from "../types";
 export declare class Client {
     readonly accessToken?: string;
     readonly headers: headers;
@@ -17,5 +17,7 @@ export declare class Client {
     mangaDetails(manga: MediaType): Promise<MediaType>;
     searchCharacter(search: Scalars["String"], pagination: QueryPageArgs): Promise<CharacterType[]>;
     characterDetails(character: CharacterType): Promise<CharacterType>;
+    updateEntry(Args: MutationSaveMediaListEntryArgs): Promise<MediaList>;
+    deleteEntry(entryId: number): Promise<Boolean>;
 }
 //# sourceMappingURL=index.d.ts.map

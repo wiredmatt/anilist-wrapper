@@ -1,7 +1,12 @@
 "use strict";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-import { User, Media, Character } from "../queries";
+import {
+  User as UserQueries,
+  Media as MediaQueries,
+  Character as CharacterQueries,
+} from "../queries";
+import { Media as MediaMutations } from "../mutations";
 import {
   headers,
   Scalars,
@@ -13,6 +18,8 @@ import {
   SeasonYear,
   Media as MediaType,
   Character as CharacterType,
+  MutationSaveMediaListEntryArgs,
+  MediaList,
 } from "../types";
 
 import { extend } from "../utils";
@@ -28,7 +35,7 @@ export class Client {
   readonly userId?: Scalars["Int"];
 
   animeLists?: MediaListCollection;
-  
+
   mangaLists?: MediaListCollection;
 
   userData?: UserType;
@@ -64,10 +71,13 @@ export class Client {
         else if (r.Viewer) return r.Viewer;
         else if (r.Character) return r.Character;
         else if (r.MediaListCollection) return r.MediaListCollection;
+        else if (r.SaveMediaListEntry) return r.SaveMediaListEntry.id;
+        else if (r.DeleteMediaListEntry) return r.DeleteMediaListEntry.deleted;
         else if (r.Page) {
           if (r.Page.characters) return r.Page.characters;
           else if (r.Page.media) return r.Page.media;
-        } else return r;
+        } 
+        else return r;
       })
       .catch((err) => {
         throw {
@@ -79,7 +89,7 @@ export class Client {
   async fetchUser(): Promise<UserType> {
     if (!this.userId) throw { error: "User must be authenticated." };
 
-    await this.fetch<UserType>(User.FETCH_USER())
+    await this.fetch<UserType>(UserQueries.FETCH_USER())
       .then((user) => {
         this.userData = user;
       })
@@ -94,10 +104,14 @@ export class Client {
     if (!this.userId) throw { error: "User must be authenticated." };
 
     await this.fetch<MediaListCollection>(
-      User.USER_ANIME_LIST(this.userId)
-    ).then(lists => {
-      this.animeLists = lists;
-    }).catch(err => {throw err})
+      UserQueries.USER_ANIME_LIST(this.userId)
+    )
+      .then((lists) => {
+        this.animeLists = lists;
+      })
+      .catch((err) => {
+        throw err;
+      });
 
     return this.animeLists!;
   }
@@ -106,10 +120,14 @@ export class Client {
     if (!this.userId) throw { error: "User must be authenticated." };
 
     await this.fetch<MediaListCollection>(
-      User.USER_MANGA_LIST(this.userId)
-    ).then(lists => {
-      this.mangaLists = lists;
-    }).catch(err => {throw err})
+      UserQueries.USER_MANGA_LIST(this.userId)
+    )
+      .then((lists) => {
+        this.mangaLists = lists;
+      })
+      .catch((err) => {
+        throw err;
+      });
 
     return this.mangaLists!;
   }
@@ -123,10 +141,10 @@ export class Client {
   ): Promise<MediaType[]> {
     console.log("pagination is: " + JSON.stringify(pagination));
     return await this.fetch<MediaType[]>(
-      Media.SearchMedia.SEARCH_ANIME({
+      MediaQueries.SearchMedia.SEARCH_ANIME({
         search,
-        page:pagination.page,
-        perPage:pagination.perPage,
+        page: pagination.page,
+        perPage: pagination.perPage,
         status,
         seasonYear,
         genres,
@@ -142,10 +160,10 @@ export class Client {
     genres?: Scalars["String"][]
   ): Promise<MediaType[]> {
     return await this.fetch<MediaType[]>(
-      Media.SearchMedia.SEARCH_MANGA({
+      MediaQueries.SearchMedia.SEARCH_MANGA({
         search,
-        page:pagination.page,
-        perPage:pagination.perPage,
+        page: pagination.page,
+        perPage: pagination.perPage,
         status,
         seasonYear,
         genres,
@@ -155,16 +173,20 @@ export class Client {
 
   async animeDetails(anime: MediaType): Promise<MediaType> {
     const details = await this.fetch<MediaType>(
-      Media.MediaDetails.ANIME_DETAILS(anime.id)
-    ).catch(err => {throw err});
+      MediaQueries.MediaDetails.ANIME_DETAILS(anime.id)
+    ).catch((err) => {
+      throw err;
+    });
 
     return extend(details, anime);
   }
 
   async mangaDetails(manga: MediaType): Promise<MediaType> {
     const details = await this.fetch<MediaType>(
-      Media.MediaDetails.MANGA_DETAILS(manga.id)
-    ).catch(err => {throw err});
+      MediaQueries.MediaDetails.MANGA_DETAILS(manga.id)
+    ).catch((err) => {
+      throw err;
+    });
     return extend(details, manga);
   }
 
@@ -173,14 +195,40 @@ export class Client {
     pagination: QueryPageArgs
   ): Promise<CharacterType[]> {
     return await this.fetch<CharacterType[]>(
-      Character.SEARCH_CHARACTERS(search, pagination)
+      CharacterQueries.SEARCH_CHARACTERS(search, pagination)
     );
   }
 
   async characterDetails(character: CharacterType): Promise<CharacterType> {
     const details = await this.fetch<CharacterType>(
-      Character.CHARACTER_DETAILS(character.id)
-    ).catch(err => {throw err})
+      CharacterQueries.CHARACTER_DETAILS(character.id)
+    ).catch((err) => {
+      throw err;
+    });
     return extend(details, character);
+  }
+
+  async updateEntry(
+    Args: MutationSaveMediaListEntryArgs
+  ): Promise<MediaList> {
+    const response = await this.fetch<MediaList>(
+      MediaMutations.UPDATE_ENTRY(Args)
+    ).catch((err) => {
+      throw err;
+    });
+
+    return response;
+  }
+
+  async deleteEntry(
+    entryId: number
+  ): Promise<Boolean> {
+    const response = await this.fetch<Boolean>(
+      MediaMutations.DELETE_ENTRY(entryId)
+    ).catch((err) => {
+      throw err;
+    });
+
+    return response;
   }
 }
