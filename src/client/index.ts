@@ -139,7 +139,6 @@ export class Client {
     seasonYear?: SeasonYear,
     genres?: Scalars["String"][]
   ): Promise<MediaType[]> {
-    console.log("pagination is: " + JSON.stringify(pagination));
     return await this.fetch<MediaType[]>(
       MediaQueries.SearchMedia.SEARCH_ANIME({
         search,
